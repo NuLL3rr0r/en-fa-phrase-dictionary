@@ -36,7 +36,7 @@ namespace Engine
         {
             InitializeComponent();
 
-            fileDb = String.Concat(path, "sntncmags.sql");
+            fileDb = String.Concat(path, "sntncmags.lite");
             cnnStr = String.Format("Provider=Microsoft.Jet.OLEDB.4.0;Data Source={0};Jet OLEDB:Database Password={1};", fileDb, dBpw);
 
 			if (!ChkFiles(fileDb, errDb))
@@ -81,6 +81,7 @@ namespace Engine
 
             txtEn.Clear();
             txtFa.Clear();
+            txtExample.Clear();
             txtFa.Focus();
 
             done = false;
@@ -97,6 +98,7 @@ namespace Engine
 
             txtEn.Clear();
             txtFa.Clear();
+            txtExample.Clear();
             txtFa.Focus();
         }
 
@@ -122,6 +124,11 @@ namespace Engine
             }
         }
 
+        private void txtExample_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
         private void btnSave_Click(object sender, EventArgs e)
         {
             DataTable dt = new DataTable();
@@ -145,6 +152,7 @@ namespace Engine
 				dr = dt.NewRow();
                 dr["Sentence"] = txtFa.Text.Trim();
                 dr["equalsWith"] = txtEn.Text.Trim();
+                dr["example"] = txtExample.Text.Trim();
                 dt.Rows.Add(dr);
 
                 oda.InsertCommand = ocb.GetInsertCommand();
@@ -167,6 +175,7 @@ namespace Engine
             
             txtEn.Clear();
             txtFa.Clear();
+            txtExample.Clear();
             txtFa.Focus();
 
             drr.Close();
@@ -194,7 +203,8 @@ namespace Engine
             drr = cmd.ExecuteReader();
 
             dt.Columns.Add("⁄»«—  ›«—”Ì", Type.GetType("System.String"));
-			dt.Columns.Add("„⁄«œ· «‰ê·Ì”Ì", Type.GetType("System.String"));
+            dt.Columns.Add("„⁄«œ· «‰ê·Ì”Ì", Type.GetType("System.String"));
+            dt.Columns.Add("„À«·", Type.GetType("System.String"));
 
             bool found = false;
             while (drr.Read())
@@ -203,7 +213,8 @@ namespace Engine
                 {
                     dr = dt.NewRow();
                     dr[0] = drr["Sentence"].ToString();
-                    dr[1] = drr["equalsWith"].ToString();						 
+                    dr[1] = drr["equalsWith"].ToString();
+                    dr[2] = drr["example"].ToString();
                     dt.Rows.Add(dr);
                     found = true;
                 }
@@ -214,6 +225,7 @@ namespace Engine
                 dgw.DataSource = dt;
                 dgw.Columns[0].Width = 232;
                 dgw.Columns[1].Width = 232;
+                dgw.Columns[2].Width = 232;
                 dgw.Sort(dgw.Columns[0], System.ComponentModel.ListSortDirection.Ascending);
             }
             else
@@ -247,6 +259,7 @@ namespace Engine
 
             dt.Columns.Add("⁄»«—  ›«—”Ì", Type.GetType("System.String"));
             dt.Columns.Add("„⁄«œ· «‰ê·Ì”Ì", Type.GetType("System.String"));
+            dt.Columns.Add("„À«·", Type.GetType("System.String"));
 
             bool found = false;
             while (drr.Read())
@@ -256,6 +269,7 @@ namespace Engine
                     dr = dt.NewRow();
                     dr[0] = drr["Sentence"].ToString();
                     dr[1] = drr["equalsWith"].ToString();
+                    dr[2] = drr["example"].ToString();
                     dt.Rows.Add(dr);
                     found = true;
                 }
@@ -266,6 +280,7 @@ namespace Engine
                 dgw.DataSource = dt;
                 dgw.Columns[0].Width = 232;
                 dgw.Columns[1].Width = 232;
+                dgw.Columns[2].Width = 232;
                 dgw.Sort(dgw.Columns[1], System.ComponentModel.ListSortDirection.Ascending);
             }
             else
@@ -289,6 +304,7 @@ namespace Engine
                 {
                     txtFa.Text = dgw.Rows[dgw.CurrentRow.Index].Cells[0].Value.ToString().Trim();
                     txtEn.Text = dgw.Rows[dgw.CurrentRow.Index].Cells[1].Value.ToString().Trim();
+                    txtExample.Text = dgw.Rows[dgw.CurrentRow.Index].Cells[2].Value.ToString().Trim();
                     btnErase.Enabled = true;
                     btnEdit.Enabled = true;
                 }
@@ -335,6 +351,7 @@ namespace Engine
                         dr.BeginEdit();
                         dr["Sentence"] = txtFa.Text.Trim();
                         dr["equalsWith"] = txtEn.Text.Trim();
+                        dr["example"] = txtExample.Text.Trim();
                         dr.EndEdit();
                         
                         oda.UpdateCommand = ocb.GetUpdateCommand();
@@ -344,6 +361,7 @@ namespace Engine
                             ds.AcceptChanges();
                             dgw.Rows[dgw.CurrentRow.Index].Cells[0].Value = txtFa.Text.Trim();
                             dgw.Rows[dgw.CurrentRow.Index].Cells[1].Value = txtEn.Text.Trim();
+                            dgw.Rows[dgw.CurrentRow.Index].Cells[2].Value = txtExample.Text.Trim();
                             dgw.Sort(dgw.Columns[0], System.ComponentModel.ListSortDirection.Ascending);
                         }
                         else
@@ -353,6 +371,7 @@ namespace Engine
                         btnEdit.Enabled = false;
                         txtFa.Clear();
                         txtEn.Clear();
+                        txtExample.Clear();
                         txtFa.Focus();
                     }
                     break;
@@ -361,6 +380,7 @@ namespace Engine
                     btnEdit.Enabled = false;
                     txtFa.Clear();
                     txtEn.Clear();
+                    txtExample.Clear();
                     txtFa.Focus();
                     break;
                 case DialogResult.Cancel:
@@ -417,6 +437,7 @@ namespace Engine
                     btnEdit.Enabled = false;
                     txtFa.Clear();
                     txtEn.Clear();
+                    txtExample.Clear();
                     txtFa.Focus();
                     break;
                 case DialogResult.Cancel:
